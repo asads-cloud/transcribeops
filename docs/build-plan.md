@@ -64,3 +64,55 @@ docs/architecture.md
 - Backend owns orchestration and validation
 - Worker owns transcription execution
 - API-first design before implementation
+
+---
+
+# Phase 2 - Local Backend MVP
+
+Built the first working backend service locally before introducing AWS, workers, or frontend components.
+
+## Deliverables
+
+- FastAPI backend application
+- In-memory job persistence
+- Health endpoint
+- Job creation endpoint
+- Job retrieval endpoint
+- Pydantic job models
+- Automated pytest coverage
+- Swagger/OpenAPI documentation
+- Local development workflow
+
+## Done Criteria
+
+- FastAPI server starts locally
+- `/health` returns HTTP 200
+- `/jobs` creates a new job
+- `/jobs/{job_id}` returns an existing job
+- Invalid job IDs return HTTP 404
+- Job status defaults to `created`
+- UUID job IDs are generated correctly
+- Tests pass successfully
+- OpenAPI docs load successfully
+
+## Outputs
+
+```text
+backend/app/main.py
+backend/app/routes.py
+backend/app/models.py
+backend/app/job_store.py
+backend/app/config.py
+backend/tests/test_routes.py
+backend/requirements.txt
+```
+
+## Key Decisions
+
+- FastAPI selected for lightweight API development
+- Pydantic used for strict schema validation
+- In-memory persistence used before introducing databases
+- UUIDs used as public job identifiers
+- API contract implemented before worker development
+- Local-first development before AWS integration
+- Automated tests introduced immediately alongside implementation

@@ -27,7 +27,7 @@ User → Frontend → FastAPI Backend → S3 Upload → DynamoDB Job Record → 
 
 ## Project Status
 
-Phase 0: Project setup
+Phase 3: Local file upload simulation
 
 ## Repository Structure
 
