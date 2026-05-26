@@ -9,8 +9,7 @@ from app.config import (
     ALLOWED_AUDIO_EXTENSIONS,
     MAX_UPLOAD_SIZE_BYTES,
 )
-from app.job_store import create_job, get_job, update_job
-
+from app.job_store import create_job, get_job, update_job, list_jobs
 router = APIRouter()
 
 
@@ -22,6 +21,16 @@ def health_check() -> dict:
 @router.post("/jobs", response_model=Job, status_code=201)
 def create_transcription_job() -> Job:
     return create_job()
+
+
+@router.get("/jobs", response_model=list[Job])
+def list_transcription_jobs(status: JobStatus | None = None) -> list[Job]:
+    jobs = list_jobs()
+
+    if status is not None:
+        jobs = [job for job in jobs if job.status == status]
+
+    return jobs
 
 
 @router.get("/jobs/{job_id}", response_model=Job)
@@ -74,3 +83,50 @@ async def upload_local_file(job_id: str, file: UploadFile = File(...)):
     )
 
     return updated_job
+
+
+@router.post("/jobs/{job_id}/processing", response_model=Job)
+def mark_job_processing(job_id: str) -> Job:
+    job = get_job(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    return update_job(
+        job_id,
+        {
+            "status": JobStatus.processing,
+        },
+    )
+
+
+@router.post("/jobs/{job_id}/complete-local", response_model=Job)
+def mark_job_completed_local(job_id: str) -> Job:
+    job = get_job(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    return update_job(
+        job_id,
+        {
+            "status": JobStatus.completed,
+            "transcript_key": f"transcripts/{job_id}.txt",
+            "local_transcript_path": str(TRANSCRIPTS_DIR / f"{job_id}.txt"),
+        },
+    )
+
+
+@router.post("/jobs/{job_id}/fail", response_model=Job)
+def mark_job_failed(job_id: str) -> Job:
+    job = get_job(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    return update_job(
+        job_id,
+        {
+            "status": JobStatus.failed,
+        },
+    )

@@ -24,6 +24,10 @@ def get_job(job_id: str) -> Optional[Job]:
     return _jobs.get(job_id)
 
 
+def list_jobs() -> list[Job]:
+    return list(_jobs.values())
+
+
 def clear_jobs() -> None:
     _jobs.clear()
 

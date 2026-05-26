@@ -172,3 +172,91 @@ backend/requirements.txt
 - File size limits added to reduce abuse risk
 - Upload lifecycle simulated locally before queue integration
 - API contract expanded incrementally without introducing infrastructure dependencies
+
+---
+
+# Phase 4 - Local Worker Without Whisper
+
+Introduce asynchronous job processing before integrating real ML transcription.
+
+This phase establishes the worker architecture pattern locally using a fake transcription implementation.
+
+The backend and worker now operate as separate processes communicating over HTTP while sharing local filesystem storage.
+
+---
+
+# Deliverables
+
+- Separate local worker service
+- Backend worker-support endpoints
+- Job polling logic
+- Job processing lifecycle handling
+- Fake transcript generation
+- Local transcript persistence
+- Worker logging
+- Failure handling for missing uploads
+- Local asynchronous processing simulation
+
+---
+
+# Done Criteria
+
+- Worker runs independently from backend
+- Worker discovers uploaded jobs successfully
+- Worker marks jobs as processing
+- Worker creates transcript files locally
+- Worker marks jobs as completed
+- Missing uploaded files mark jobs as failed
+- Transcript files appear in `local_storage/transcripts/`
+- Backend and worker communicate successfully via HTTP
+- End-to-end local processing flow works correctly
+
+---
+
+# Outputs
+
+## Worker
+
+```text
+worker/app/config.py
+worker/app/fake_transcriber.py
+worker/app/job_client.py
+worker/app/worker.py
+worker/requirements.txt
+```
+
+## Backend Updates
+
+```text
+backend/app/routes.py
+backend/app/job_store.py
+backend/app/models.py
+```
+
+## Local Storage
+
+```text
+local_storage/transcripts/
+```
+
+---
+
+# Key Decisions
+
+- Worker implemented as a completely separate process from the API
+- HTTP used between worker and backend to mirror future distributed architecture
+- Fake transcription introduced before Whisper integration to validate orchestration first
+- Shared filesystem storage used temporarily before S3 integration
+- Logging introduced early for operational visibility
+- Failure handling implemented before real ML processing
+
+---
+
+# Processing Lifecycle
+
+```text
+uploaded
+processing
+completed
+failed
+```

@@ -27,3 +27,4 @@ class Job(BaseModel):
     file_size_bytes: int = 0
     model: str = "tiny"
     local_upload_path: str | None = None
+    local_transcript_path: str | None = None
