@@ -116,3 +116,59 @@ backend/requirements.txt
 - API contract implemented before worker development
 - Local-first development before AWS integration
 - Automated tests introduced immediately alongside implementation
+
+---
+
+# Phase 3 - Local File Upload Simulation
+
+Introduce local filesystem uploads before implementing cloud object storage.
+
+This phase simulates the future S3 upload pipeline while keeping the system entirely local and easy to debug.
+
+## Deliverables
+
+- Local filesystem storage directories
+- File upload endpoint
+- Audio file validation
+- Upload size validation
+- Local upload persistence
+- Job metadata updates
+- Job lifecycle transition handling
+- Expanded automated test coverage
+
+## Done Criteria
+
+- `POST /jobs/{job_id}/upload-local` accepts multipart uploads
+- `.mp3`, `.wav`, and `.m4a` files are accepted
+- Invalid file extensions return HTTP 400
+- Files larger than 5MB return HTTP 400
+- Uploaded files are stored locally
+- Upload directories are auto-created
+- Job status transitions from `created` to `uploaded`
+- File size metadata is stored correctly
+- Local upload path metadata is stored correctly
+- Tests pass successfully
+
+## Outputs
+
+```text
+local_storage/uploads/
+local_storage/transcripts/
+
+backend/app/config.py
+backend/app/models.py
+backend/app/job_store.py
+backend/app/routes.py
+backend/tests/test_routes.py
+backend/requirements.txt
+```
+
+## Key Decisions
+
+- Local filesystem storage introduced before S3 integration
+- Upload validation implemented early to mirror production behaviour
+- UUID-based filenames retained for future S3 compatibility
+- Local upload paths stored in job metadata for worker access
+- File size limits added to reduce abuse risk
+- Upload lifecycle simulated locally before queue integration
+- API contract expanded incrementally without introducing infrastructure dependencies

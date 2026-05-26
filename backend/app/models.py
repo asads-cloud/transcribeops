@@ -26,3 +26,4 @@ class Job(BaseModel):
     error_message: Optional[str] = None
     file_size_bytes: int = 0
     model: str = "tiny"
+    local_upload_path: str | None = None

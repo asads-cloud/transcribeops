@@ -29,3 +29,8 @@ Thumbs.db
 
 # Logs
 *.log
+
+# audios
+local_storage/uploads/*
+local_storage/transcripts/*
+!.gitkeep

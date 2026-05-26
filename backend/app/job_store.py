@@ -1,6 +1,7 @@
 from typing import Dict, Optional
 from uuid import uuid4
 
+from datetime import datetime, timezone
 from app.models import Job
 
 
@@ -25,3 +26,13 @@ def get_job(job_id: str) -> Optional[Job]:
 
 def clear_jobs() -> None:
     _jobs.clear()
+
+
+def update_job(job_id: str, updates: dict):
+    job = get_job(job_id)
+
+    for key, value in updates.items():
+        setattr(job, key, value)
+
+    job.updated_at = datetime.now(timezone.utc)
+    return job
