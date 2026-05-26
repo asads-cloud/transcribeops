@@ -2,7 +2,10 @@ import logging
 from pathlib import Path
 
 from config import TRANSCRIPTS_DIR, UPLOADS_DIR
-from fake_transcriber import generate_fake_transcript
+
+#from fake_transcriber import generate_fake_transcript
+from whisper_transcriber import transcribe_audio
+
 from job_client import (
     get_uploaded_jobs,
     mark_completed,
@@ -35,17 +38,23 @@ def process_job(job: dict) -> None:
 
     mark_processing(job_id)
 
-    transcript = generate_fake_transcript(job_id)
+    try:
+        transcript = transcribe_audio(upload_path, model_name="tiny")
 
-    TRANSCRIPTS_DIR.mkdir(parents=True, exist_ok=True)
+        TRANSCRIPTS_DIR.mkdir(parents=True, exist_ok=True)
 
-    transcript_path = TRANSCRIPTS_DIR / f"{job_id}.txt"
-    transcript_path.write_text(transcript, encoding="utf-8")
+        transcript_path = TRANSCRIPTS_DIR / f"{job_id}.txt"
+        transcript_path.write_text(transcript, encoding="utf-8")
 
-    transcript_key = f"transcripts/{job_id}.txt"
-    mark_completed(job_id, transcript_key)
+        transcript_key = f"transcripts/{job_id}.txt"
+        mark_completed(job_id, transcript_key)
 
-    logger.info("Completed job %s", job_id)
+        logger.info("Completed job %s", job_id)
+
+    except Exception as exc:
+        error_message = f"Transcription failed: {exc}"
+        logger.exception(error_message)
+        mark_failed(job_id, error_message)
 
 
 def run_once() -> None:

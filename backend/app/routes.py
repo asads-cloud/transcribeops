@@ -1,5 +1,7 @@
 from app.models import Job, JobStatus
 
+from pydantic import BaseModel
+
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File
 
@@ -11,6 +13,9 @@ from app.config import (
 )
 from app.job_store import create_job, get_job, update_job, list_jobs
 router = APIRouter()
+
+class JobFailureRequest(BaseModel):
+    error_message: str
 
 
 @router.get("/health")
@@ -118,7 +123,7 @@ def mark_job_completed_local(job_id: str) -> Job:
 
 
 @router.post("/jobs/{job_id}/fail", response_model=Job)
-def mark_job_failed(job_id: str) -> Job:
+def mark_job_failed(job_id: str, request: JobFailureRequest) -> Job:
     job = get_job(job_id)
 
     if job is None:
@@ -128,5 +133,32 @@ def mark_job_failed(job_id: str) -> Job:
         job_id,
         {
             "status": JobStatus.failed,
+            "error_message": request.error_message,
         },
     )
+
+
+@router.get("/jobs/{job_id}/transcript")
+def get_job_transcript(job_id: str) -> dict:
+    job = get_job(job_id)
+
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+
+    if job.status != JobStatus.completed:
+        raise HTTPException(status_code=400, detail="Job is not completed yet")
+
+    if job.local_transcript_path is None:
+        raise HTTPException(status_code=404, detail="Transcript path not found")
+
+    transcript_path = Path(job.local_transcript_path)
+
+    if not transcript_path.exists():
+        raise HTTPException(status_code=404, detail="Transcript file not found")
+
+    transcript_text = transcript_path.read_text(encoding="utf-8")
+
+    return {
+        "job_id": job.job_id,
+        "transcript": transcript_text,
+    }

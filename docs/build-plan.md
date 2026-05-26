@@ -260,3 +260,96 @@ processing
 completed
 failed
 ```
+
+---
+
+# Phase 5 - Real Whisper Locally
+
+Replace fake transcript generation with real ML-powered transcription using OpenAI Whisper.
+
+This phase preserves the existing asynchronous worker architecture while introducing real audio decoding and transcription processing.
+
+The system now performs actual speech-to-text transcription locally using the Whisper `tiny` model.
+
+---
+
+# Deliverables
+
+- Whisper transcription integration
+- Local Whisper model loading
+- Real audio transcription
+- Transcription duration logging
+- Corrupt audio failure handling
+- Transcript text persistence
+- Worker integration with Whisper
+- Local ffmpeg dependency installation
+
+---
+
+# Done Criteria
+
+- Worker successfully loads Whisper model
+- `.mp3` audio files transcribe successfully
+- `.wav` audio files transcribe successfully
+- Transcript files contain real transcription output
+- Corrupt or invalid audio files fail gracefully
+- Failed jobs store `error_message`
+- Worker logs transcription duration
+- Existing job lifecycle remains functional
+- Transcript retrieval endpoint returns real transcript text
+
+---
+
+# Outputs
+
+## Worker
+
+```text
+worker/app/whisper_transcriber.py
+worker/app/worker.py
+worker/requirements.txt
+```
+
+## Local Runtime Dependencies
+
+```text
+ffmpeg
+openai-whisper
+```
+
+---
+
+# Key Decisions
+
+- Whisper integrated only after validating worker orchestration architecture
+- `tiny` model selected first to minimise local CPU and memory requirements
+- CPU-based inference retained initially for local simplicity
+- Shared filesystem storage retained temporarily before S3 integration
+- Whisper model loading abstracted into dedicated module
+- Real ML processing introduced before Dockerisation to validate runtime dependencies locally
+- ffmpeg introduced as explicit system dependency for audio decoding compatibility
+
+---
+
+# Processing Lifecycle
+
+```text
+uploaded
+processing
+completed
+failed
+```
+
+---
+
+# Runtime Behaviour
+
+```text
+Audio Upload
+→ Worker Polling
+→ Whisper Model Load
+→ Audio Decode via ffmpeg
+→ Transcription
+→ Transcript File Write
+→ Job Completion
+```
