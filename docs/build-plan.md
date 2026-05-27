@@ -624,3 +624,141 @@ Docker Compose
 │
 └── shared local_storage volume
 ```
+
+---
+
+# Phase 8 - PowerShell Local Automation
+
+## Overview
+
+Improve the local developer experience by introducing repeatable PowerShell automation workflows.
+
+This phase transforms the project from a manually operated local application into a reproducible developer platform with one-command setup, testing, image builds, and cleanup workflows.
+
+The repository now provides a significantly smoother onboarding experience while demonstrating Windows-focused platform engineering and automation skills.
+
+---
+
+## Deliverables
+
+### PowerShell Automation
+- Local environment setup script
+- Automated Docker image build script
+- Automated test execution script
+- Local cleanup/reset script
+- Docker validation logic
+- Local storage bootstrap logic
+- `.env` bootstrap workflow
+- Exit code handling
+
+### Developer Workflow Improvements
+- One-command local startup
+- One-command cleanup
+- One-command testing
+- Reduced onboarding friction
+- Repeatable local workflows
+
+---
+
+## Done Criteria
+
+- `./scripts/setup-local.ps1` starts the full platform
+- Docker installation validation works correctly
+- `.env` auto-creation works correctly
+- Local storage folders auto-create successfully
+- `docker compose up --build` launches successfully through script
+- `./scripts/build-images.ps1` builds all images successfully
+- `./scripts/run-tests.ps1` executes backend tests successfully
+- Worker tests execute conditionally when present
+- `./scripts/clean-local.ps1` resets local environment successfully
+- Frontend workflow still operates correctly after cleanup/setup cycle
+- Full local platform remains operational after automation introduction
+
+---
+
+## Outputs
+
+### PowerShell Scripts
+- `scripts/setup-local.ps1`
+- `scripts/run-tests.ps1`
+- `scripts/build-images.ps1`
+- `scripts/clean-local.ps1`
+
+### Documentation Updates
+- `README.md`
+- `docs/build-plan.md`
+
+### ADRs
+- `docs/decisions/010-use-powershell-local-automation.md`
+
+---
+
+## Key Decisions
+
+- PowerShell selected to prioritise Windows-native developer workflows
+- Automation introduced before AWS deployment to reduce operational friction early
+- Docker Compose retained as the orchestration layer beneath automation scripts
+- Environment bootstrapping automated to reduce onboarding errors
+- Cleanup workflow added to simplify repeated testing and debugging cycles
+- Test automation introduced before CI/CD pipeline implementation
+- Scripts designed to mirror future operational workflows used in deployment automation
+- Exit-code validation added to improve reliability and debugging visibility
+
+---
+
+## Runtime Behaviour
+
+```text
+Developer
+    ↓
+PowerShell Automation
+    ↓
+Docker Compose
+    ↓
+Frontend + Backend + Worker Containers
+    ↓
+Shared Local Storage
+```
+
+---
+
+## Automation Workflow
+
+### setup-local.ps1
+
+```text
+setup-local.ps1
+├── Validate Docker
+├── Create .env if missing
+├── Create local storage directories
+└── Start Docker Compose
+```
+
+### run-tests.ps1
+
+```text
+run-tests.ps1
+├── Build backend image
+├── Build worker image
+├── Run backend pytest suite
+└── Conditionally run worker tests
+```
+
+### build-images.ps1
+
+```text
+build-images.ps1
+├── Build backend image
+├── Build worker image
+└── Build frontend image
+```
+
+### clean-local.ps1
+
+```text
+clean-local.ps1
+├── Stop containers
+├── Remove orphan containers
+├── Clear local storage
+└── Recreate local directories
+```

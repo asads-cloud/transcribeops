@@ -1,33 +1,74 @@
 # TranscribeOps
 
-A production-style AWS transcription platform built to demonstrate cloud, platform, and DevOps engineering skills.
+Production-style cloud transcription platform built to demonstrate platform engineering, DevOps, and AWS infrastructure skills.
 
-## Goal
+Users upload audio files through a browser UI, transcription jobs are processed asynchronously by Dockerised Whisper workers, and completed transcripts are returned through the frontend.
 
-Users upload an audio file, the system queues a transcription job, a Dockerised worker processes it, and the transcript is displayed in the browser.
+---
 
-## Target Architecture
+## Current Status
 
-User → Frontend → FastAPI Backend → S3 Upload → DynamoDB Job Record → SQS Queue → Worker → Transcript Storage
+Phase 8 — PowerShell Local Automation
+
+Current implementation supports:
+
+- React frontend
+- FastAPI backend
+- Whisper transcription worker
+- Docker Compose orchestration
+- Local asynchronous job processing
+- Automated PowerShell developer workflows
+
+AWS infrastructure deployment begins in later phases.
+
+---
+
+## Planned AWS Architecture
+
+```text
+User
+→ CloudFront Frontend
+→ FastAPI Backend (ALB)
+→ S3 Upload Storage
+→ DynamoDB Job Metadata
+→ SQS Transcription Queue
+→ ECS/Fargate Whisper Worker
+→ S3 Transcript Storage
+```
+
+---
 
 ## Tech Stack
 
+### Application
+
 - Python
 - FastAPI
+- React
+- Vite
+- OpenAI Whisper
+
+### Platform / DevOps
+
 - Docker
 - Docker Compose
 - PowerShell
-- AWS CLI
-- Terraform
 - GitHub Actions
-- AWS S3
-- AWS SQS
-- AWS DynamoDB
-- AWS ECS/Fargate
+- Terraform
+- AWS CLI
 
-## Project Status
+### AWS Services
 
-Phase 8: PowerShell local automation
+- S3
+- SQS
+- DynamoDB
+- ECS/Fargate
+- ALB
+- CloudFront
+- Route 53
+- WAF
+
+---
 
 ## Repository Structure
 
@@ -41,23 +82,37 @@ docs/
 .github/
 ```
 
-## Build Phases
-
-See docs/build-plan.md.
-
-## Architecture
-
-See docs/architecture.md.
-
 ---
 
 ## Local Development
 
-Start the full stack locally:
+### Start Full Platform
 
 ```powershell
-docker compose up --build
+.\scripts\setup-local.ps1
 ```
+
+### Run Tests
+
+```powershell
+.\scripts\run-tests.ps1
+```
+
+### Build Docker Images
+
+```powershell
+.\scripts\build-images.ps1
+```
+
+### Clean Local Environment
+
+```powershell
+.\scripts\clean-local.ps1
+```
+
+---
+
+## Local URLs
 
 Frontend:
 
@@ -68,5 +123,37 @@ http://127.0.0.1:5173
 Backend API:
 
 ```text
+http://127.0.0.1:8000
+```
+
+Swagger Docs:
+
+```text
 http://127.0.0.1:8000/docs
+```
+
+---
+
+## Documentation
+
+| Document | Purpose |
+|---|---|
+| `docs/build-plan.md` | Incremental implementation roadmap |
+| `docs/architecture.md` | System architecture and lifecycle design |
+| `RUNBOOK.md` | Operational workflows and troubleshooting |
+| `SECURITY.md` | Security strategy and hardening plans |
+| `COST.md` | Cost-control and scaling strategy |
+
+---
+
+## Current Local Architecture
+
+```text
+Browser
+→ React Frontend
+→ FastAPI Backend
+→ Worker Polling
+→ Whisper Transcription
+→ Transcript Retrieval
+→ Frontend Display
 ```
