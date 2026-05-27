@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 
@@ -6,7 +7,10 @@ APP_VERSION = "0.1.0"
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-LOCAL_STORAGE_DIR = BASE_DIR / "local_storage"
+LOCAL_STORAGE_DIR = Path(
+    os.getenv("LOCAL_STORAGE_DIR", str(BASE_DIR / "local_storage"))
+)
+
 UPLOADS_DIR = LOCAL_STORAGE_DIR / "uploads"
 TRANSCRIPTS_DIR = LOCAL_STORAGE_DIR / "transcripts"
 

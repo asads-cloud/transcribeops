@@ -1,6 +1,6 @@
 import requests
 
-from config import BACKEND_URL
+from app.config import BACKEND_URL
 
 
 def get_uploaded_jobs() -> list[dict]:

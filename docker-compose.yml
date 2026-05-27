@@ -1,19 +1,27 @@
 services:
   backend:
-    build: ./backend
+    build:
+      context: ./backend
+    container_name: transcribeops-backend
     ports:
       - "8000:8000"
-    env_file:
-      - .env
-    profiles:
-      - app
+    environment:
+      - LOCAL_STORAGE_DIR=/app/local_storage
+    volumes:
+      - ./local_storage:/app/local_storage
 
   worker:
-    build: ./worker
-    env_file:
-      - .env
-    profiles:
-      - app
+    build:
+      context: ./worker
+    container_name: transcribeops-worker
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - LOCAL_STORAGE_DIR=/app/local_storage
+      - WHISPER_MODEL=tiny
+    volumes:
+      - ./local_storage:/app/local_storage
+    depends_on:
+      - backend
 
   frontend:
     build: ./frontend

@@ -1,12 +1,13 @@
+import time
 import logging
 from pathlib import Path
 
-from config import TRANSCRIPTS_DIR, UPLOADS_DIR
+from app.config import TRANSCRIPTS_DIR, UPLOADS_DIR
 
 #from fake_transcriber import generate_fake_transcript
-from whisper_transcriber import transcribe_audio
+from app.whisper_transcriber import transcribe_audio
 
-from job_client import (
+from app.job_client import (
     get_uploaded_jobs,
     mark_completed,
     mark_failed,
@@ -68,5 +69,13 @@ def run_once() -> None:
         process_job(job)
 
 
+def run_forever(poll_interval_seconds: int = 5) -> None:
+    logger.info("Worker started")
+
+    while True:
+        run_once()
+        time.sleep(poll_interval_seconds)
+
+
 if __name__ == "__main__":
-    run_once()
+    run_forever()

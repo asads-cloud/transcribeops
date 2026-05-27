@@ -353,3 +353,107 @@ Audio Upload
 → Transcript File Write
 → Job Completion
 ```
+
+---
+
+# Phase 6 - Dockerise Backend and Worker
+
+Run the backend and transcription worker as isolated containerised services using Docker and Docker Compose.
+
+This phase transitions the platform from local Python processes into reproducible containerised infrastructure that mirrors the future ECS/Fargate deployment architecture.
+
+The backend and worker now run independently inside containers while sharing mounted local storage for uploads and transcripts.
+
+---
+
+## Deliverables
+
+- Backend Dockerfile
+- Worker Dockerfile
+- Docker Compose orchestration
+- Shared mounted storage volume
+- Container networking
+- Environment variable configuration
+- ffmpeg installation inside worker container
+- Whisper execution inside Docker
+- Containerised end-to-end transcription flow
+- Docker logging visibility
+
+---
+
+## Done Criteria
+
+- `docker compose up --build` starts successfully
+- Backend container starts correctly
+- Worker container starts correctly
+- FastAPI accessible on port `8000`
+- Health endpoint returns HTTP `200`
+- Audio uploads succeed through containerised backend
+- Worker container detects uploaded jobs
+- Worker container accesses shared uploads directory
+- Whisper model loads successfully inside container
+- Transcript files are written successfully
+- Job lifecycle completes successfully
+- Transcript endpoint returns completed transcript
+- Logs visible through Docker Compose logging
+
+---
+
+## Outputs
+
+### Docker Infrastructure
+
+- `backend/Dockerfile`
+- `worker/Dockerfile`
+- `docker-compose.yml`
+
+### Backend Updates
+
+- `backend/app/config.py`
+- `backend/requirements.txt`
+
+### Worker Updates
+
+- `worker/app/config.py`
+- `worker/app/worker.py`
+- `worker/requirements.txt`
+
+---
+
+## Key Decisions
+
+- Docker introduced before AWS deployment to validate runtime reproducibility
+- Backend and worker containerised separately to preserve service boundaries
+- Docker Compose used for local orchestration before ECS adoption
+- Shared bind-mounted local storage retained temporarily before S3 migration
+- `ffmpeg` installed directly inside worker container for audio decoding compatibility
+- Environment variables introduced for runtime configuration flexibility
+- Container networking mirrors future distributed cloud deployment patterns
+- Whisper execution validated inside container before AWS infrastructure integration
+
+---
+
+## Runtime Behaviour
+
+```text
+User Upload
+→ FastAPI Container
+→ Shared Mounted Storage
+→ Worker Container Polling
+→ Whisper Transcription
+→ Transcript File Write
+→ Job Completion
+```
+
+## Container Architecture
+
+```text
+Docker Compose
+├── backend
+│   └── FastAPI API
+│
+├── worker
+│   └── Whisper transcription worker
+│
+└── shared local_storage volume
+```
