@@ -2,8 +2,10 @@ from app.models import Job, JobStatus
 
 from pydantic import BaseModel
 
+
 from pathlib import Path
 from fastapi import APIRouter, HTTPException, UploadFile, File
+from fastapi.responses import PlainTextResponse
 
 from app.config import (
     UPLOADS_DIR,
@@ -138,8 +140,8 @@ def mark_job_failed(job_id: str, request: JobFailureRequest) -> Job:
     )
 
 
-@router.get("/jobs/{job_id}/transcript")
-def get_job_transcript(job_id: str) -> dict:
+@router.get("/jobs/{job_id}/transcript", response_class=PlainTextResponse)
+def get_job_transcript(job_id: str) -> str:
     job = get_job(job_id)
 
     if job is None:
@@ -158,7 +160,4 @@ def get_job_transcript(job_id: str) -> dict:
 
     transcript_text = transcript_path.read_text(encoding="utf-8")
 
-    return {
-        "job_id": job.job_id,
-        "transcript": transcript_text,
-    }
+    return transcript_text

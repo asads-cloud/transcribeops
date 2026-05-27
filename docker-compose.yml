@@ -24,8 +24,12 @@ services:
       - backend
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+    container_name: transcribeops-frontend
     ports:
-      - "3000:3000"
-    profiles:
-      - app
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE_URL=http://127.0.0.1:8000
+    depends_on:
+      - backend

@@ -27,7 +27,7 @@ User → Frontend → FastAPI Backend → S3 Upload → DynamoDB Job Record → 
 
 ## Project Status
 
-Phase 3: Local file upload simulation
+Phase 8: PowerShell local automation
 
 ## Repository Structure
 
@@ -48,3 +48,25 @@ See docs/build-plan.md.
 ## Architecture
 
 See docs/architecture.md.
+
+---
+
+## Local Development
+
+Start the full stack locally:
+
+```powershell
+docker compose up --build
+```
+
+Frontend:
+
+```text
+http://127.0.0.1:5173
+```
+
+Backend API:
+
+```text
+http://127.0.0.1:8000/docs
+```

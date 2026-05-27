@@ -457,3 +457,170 @@ Docker Compose
 │
 └── shared local_storage volume
 ```
+
+---
+
+# Phase 7 - Basic Frontend
+
+## Overview
+
+Create the first recruiter-facing user interface for the transcription platform.
+
+This phase introduces a browser-based workflow allowing users to:
+
+- Upload audio files
+- Monitor asynchronous transcription progress
+- Read completed transcripts
+
+The frontend communicates with the existing FastAPI backend while preserving the asynchronous worker architecture introduced in previous phases.
+
+The system now behaves as a complete local full-stack application.
+
+---
+
+# Deliverables
+
+## Frontend Application
+
+- React frontend application
+- Browser-based upload workflow
+- Frontend routing
+- Job polling interface
+- Transcript display UI
+- Architecture overview page
+- GitHub repository linking
+- Frontend API integration
+
+## Containerisation
+
+- Frontend Docker container
+- Full-stack Docker Compose orchestration
+
+## Workflow
+
+- Browser-based end-to-end workflow
+
+---
+
+# Done Criteria
+
+- Frontend loads successfully in browser
+- Upload page accepts audio file uploads
+- Frontend creates jobs through backend API
+- Frontend uploads audio files successfully
+- Job status updates automatically through polling
+- Completed transcripts display in browser
+- Failed jobs display visible error messages
+- Architecture page explains local system behaviour
+- Frontend container runs successfully through Docker Compose
+- No Postman usage required for happy-path operation
+- End-to-end browser workflow functions correctly
+
+---
+
+# Outputs
+
+## Frontend
+
+```text
+frontend/
+├── Dockerfile
+├── package.json
+├── vite.config.js
+├── index.html
+│
+└── src/
+    ├── main.jsx
+    ├── App.jsx
+    ├── api.js
+    ├── style.css
+    │
+    └── pages/
+        ├── Home.jsx
+        ├── Upload.jsx
+        ├── JobStatus.jsx
+        └── Architecture.jsx
+```
+
+---
+
+## Backend Updates
+
+```text
+backend/
+└── app/
+    ├── main.py
+    └── routes.py
+
+backend/requirements.txt
+```
+
+---
+
+## Docker Updates
+
+```text
+docker-compose.yml
+```
+
+---
+
+## Docker Ignore Files
+
+```text
+backend/.dockerignore
+worker/.dockerignore
+frontend/.dockerignore
+```
+
+---
+
+# Key Decisions
+
+- React selected for lightweight recruiter-facing frontend development
+- Vite selected for fast local frontend iteration
+- Frontend implemented only after backend and worker architecture stabilised
+- Polling selected initially instead of WebSockets to minimise complexity
+- Frontend containerised separately to preserve service boundaries
+- Browser-based workflow introduced before AWS deployment to validate full-stack behaviour locally
+- Simple CSS retained initially to prioritise architecture and workflow clarity
+- Frontend API abstraction introduced before cloud infrastructure integration
+- CORS enabled explicitly to support distributed frontend/backend architecture
+
+---
+
+# Runtime Behaviour
+
+```text
+Browser UI
+    ↓
+React Frontend
+    ↓
+FastAPI Backend
+    ↓
+Worker Polling
+    ↓
+Whisper Transcription
+    ↓
+Transcript Retrieval
+    ↓
+Frontend Transcript Display
+```
+
+---
+
+# Frontend Architecture
+
+```text
+Docker Compose
+├── frontend
+│   └── React/Vite application
+│
+├── backend
+│   └── FastAPI API
+│
+├── worker
+│   └── Whisper transcription worker
+│
+└── shared local_storage volume
+```

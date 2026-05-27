@@ -12,6 +12,9 @@ venv/
 node_modules/
 dist/
 build/
+local_storage/
+frontend/node_modules/
+frontend/dist/
 
 # Terraform
 .terraform/
