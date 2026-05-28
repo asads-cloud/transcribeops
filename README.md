@@ -8,18 +8,9 @@ Users upload audio files through a browser UI, transcription jobs are processed 
 
 ## Current Status
 
-Phase 8 — PowerShell Local Automation
+Phase 11 - Backend AWS Integration
 
 Current implementation supports:
-
-- React frontend
-- FastAPI backend
-- Whisper transcription worker
-- Docker Compose orchestration
-- Local asynchronous job processing
-- Automated PowerShell developer workflows
-
-AWS infrastructure deployment begins in later phases.
 
 ---
 

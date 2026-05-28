@@ -813,3 +813,33 @@ docs/decisions/011-introduce-service-abstractions.md
 This phase establishes clean architecture boundaries before introducing real AWS infrastructure.
 
 It prevents AWS-specific logic from being scattered throughout the application and significantly reduces future migration complexity.
+
+---
+
+## Phase 10 - Terraform S3/SQS/DynamoDB
+
+Create the first AWS infrastructure resources using Terraform.
+
+### Deliverables
+
+- Terraform AWS provider setup
+- S3 uploads bucket
+- S3 transcripts bucket
+- SQS transcription queue
+- SQS dead-letter queue
+- DynamoDB jobs table
+- Least-privilege IAM policies
+- Terraform outputs
+- AWS CLI verification
+
+### Done Criteria
+
+- terraform init succeeds
+- terraform validate succeeds
+- terraform plan succeeds
+- terraform apply succeeds
+- S3 buckets exist
+- SQS queues exist
+- DynamoDB table exists
+- IAM policies exist
+- AWS CLI verification succeeds

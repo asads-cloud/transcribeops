@@ -37,3 +37,10 @@ Thumbs.db
 local_storage/uploads/*
 local_storage/transcripts/*
 !.gitkeep
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+crash.log
