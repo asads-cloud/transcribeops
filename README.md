@@ -157,3 +157,43 @@ Browser
 → Transcript Retrieval
 → Frontend Display
 ```
+
+---
+
+## Infrastructure Modes
+
+The backend supports environment-based infrastructure abstraction.
+
+Current supported modes:
+
+- local
+- aws (prepared, not yet implemented)
+
+Configuration:
+
+```env
+STORAGE_MODE=local
+QUEUE_MODE=local
+DATABASE_MODE=local
+```
+
+This architecture allows the application to switch between local and AWS-backed implementations without changing application logic.
+
+---
+
+# 4. Recommended validation
+
+Run:
+
+```powershell
+.\scripts\clean-local.ps1
+.\scripts\setup-local.ps1
+.\scripts\run-tests.ps1
+```
+
+Then manually validate:
+
+- upload flow
+- worker processing
+- transcript retrieval
+- frontend polling

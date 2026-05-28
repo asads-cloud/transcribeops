@@ -762,3 +762,54 @@ clean-local.ps1
 ├── Clear local storage
 └── Recreate local directories
 ```
+
+---
+
+# Phase 9 - AWS Mode Abstraction
+
+Prepare the application for future AWS infrastructure integration without deploying real AWS resources yet.
+
+## Deliverables
+
+- Environment-based infrastructure mode selection
+- Storage service abstraction
+- Queue service abstraction
+- Job repository abstraction
+- Local implementation classes
+- AWS placeholder implementation classes
+- Service factory pattern
+- Refactored backend route dependencies
+
+## Done Criteria
+
+- Application runs fully in local mode
+- Routes depend on service interfaces
+- Local implementation details are abstracted
+- Environment variables determine implementations
+- AWS-ready boundaries exist
+- Local developer workflow remains unchanged
+
+## Outputs
+
+backend/app/services/
+backend/app/services/storage.py
+backend/app/services/queue.py
+backend/app/services/repositories.py
+backend/app/services/factory.py
+
+docs/decisions/011-introduce-service-abstractions.md
+
+.env.example
+
+## Key Decisions
+
+- Application logic must not directly depend on infrastructure implementations
+- AWS integration will be introduced through implementation swapping
+- Local development experience must remain first-class
+- Service factory pattern used for implementation selection
+
+## Why This Matters
+
+This phase establishes clean architecture boundaries before introducing real AWS infrastructure.
+
+It prevents AWS-specific logic from being scattered throughout the application and significantly reduces future migration complexity.
